@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 DATA_LENGTH = 220 # 4 bytes for each of the 54 values
 data_points = []
 
-
+#------------USAR ESTA PRIMEIRO----------------
 #esta é a conexão simples, que guarda os dados raw
 async def callback(sender, data):
     data_points.append(data)
