@@ -50,7 +50,9 @@ async def connect_to_device(device_id, device_uuid):
             print(f"Connected to device: {device_id}")
 
             # Começa o envio dos dados 
-            await client.start_notify(device_uuid, callback)
+            #await client.start_notify(device_uuid, callback)
+            await client.read_gatt_char(device_uuid, callback)
+            print(f"Start notify for device: {device_uuid}")
 
             # Coleta dados por 60 segundos
             await asyncio.sleep(60)
