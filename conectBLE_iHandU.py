@@ -61,7 +61,7 @@ async def connect_to_device(device_id, device_uuid):
 
 
 async def main():
-    device_id = "60658457-ED22-63A5-86C6-0A3297A1D188"
+    device_id = "84:71:27:AC:20:D2"
     device_uuid = "6f30b86e-bb28-48a6-b68d-4ae2e60e512a"
 
     await asyncio.gather(connect_to_device(device_id, device_uuid))

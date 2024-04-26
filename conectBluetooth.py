@@ -12,8 +12,8 @@ async def main():
         print(f"Connected: {client.is_connected}")
 
         # replace with the UUID of the characteristic you want to read
-        characteristic_uuid = "6f30b86e-bb28-48a6-b68d-4ae2e60e512a"  
-
+        characteristic_uuid = "d9c7628ae98d-413db1a8-9e0fcb24b7e8"  
+ 
         ## imprimir dados primeiros recebidos 
 
         while client.is_connected:
