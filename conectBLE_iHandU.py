@@ -73,3 +73,8 @@ async def main():
 
 
 asyncio.run(main())
+
+#correr varias vezes de modo a guardar os ficheiros de data com nomes diferentes e na ordem certa
+#Enquanto corremos, temos de gravar ao mesmo tempo para perceber que dado é que corresponde a qual coisa
+#Quando percebermos que esta a funcionar, descomentar o código acima
+#Perguntar ao afonso se é para colocar o codigo que esta, como comentário(???)
