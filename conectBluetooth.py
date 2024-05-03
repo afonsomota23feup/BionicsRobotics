@@ -2,33 +2,44 @@ import asyncio
 from bleak import BleakScanner, BleakClient
 import struct
 
+data_points = []
+
+
+def callback(sender: int, data: bytearray):
+    print(f"Received data from {sender}: {data}")
+    data_points.append(data)
+
+
 async def main():
     devices = await BleakScanner.discover()
     for d in devices:
         print(d)
 
-    device = "60658457-ED22-63A5-86C6-0A3297A1D188"  # replace with your device's address
+    device = "84:71:27:AC:20:D2"  # replace with your device's address
     async with BleakClient(device) as client:
         print(f"Connected: {client.is_connected}")
 
         # replace with the UUID of the characteristic you want to read
-        characteristic_uuid = "d9c7628ae98d-413db1a8-9e0fcb24b7e8"  
+        characteristic_uuid = "14181dce-eb95-46c5-8431-3b4fe0e0a12d"  
  
         ## imprimir dados primeiros recebidos 
 
         while client.is_connected:
-            data = await client.read_gatt_char(characteristic_uuid)
+            print("Connected: {client.is_connected}")
+            services = await client.get_services()
+            for service in services:
+                for characteristic in service.characteristics:
+                    if characteristic.uuid == characteristic_uuid:
+                        print(characteristic.properties)
+
+            data = await client.start_notify(characteristic_uuid, callback)
             print(data)
 
-            # # Parse accelerometer data
-            # ax1, ay1, az1 = struct.unpack_from('fff', data, 0)
-            # ax2, ay2, az2 = struct.unpack_from('fff', data, 44)
-            # ax3, ay3, az3 = struct.unpack_from('fff', data, 88)
-            # ax4, ay4, az4 = struct.unpack_from('fff', data, 132)
-            # ax5, ay5, az5 = struct.unpack_from('fff', data, 176)
 
-            # print(f"Accelerometer Data: {ax1}, {ay1}, {az1}, {ax2}, {ay2}, {az2}, {ax3}, {ay3}, {az3}, {ax4}, {ay4}, {az4}, {ax5}, {ay5}, {az5}")
-
+        # save the data in a file
+            with open("dataTest.txt", "w") as f:
+                for data in data_points:
+                    f.write(str(data) + "\n")
             await asyncio.sleep(1)  # pause for a second before reading again
 
 asyncio.run(main())

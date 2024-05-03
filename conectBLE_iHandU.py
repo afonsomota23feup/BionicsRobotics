@@ -65,7 +65,8 @@ async def connect_to_device(device_id, device_uuid):
 async def main():
     device_id = "84:71:27:AC:20:D2"
     #device_uuid = "6f30b86e-bb28-48a6-b68d-4ae2e60e512a"
-    device_uuid = "d9c7628a-e98d-413d-b1a8-9e0fcb24b7e8"
+    device_uuid = "14181dce-eb95-46c5-8431-3b4fe0e0a12d"
+
     
 
 
@@ -77,7 +78,8 @@ async def main():
             f.write(str(data) + "\n")
 
 
-asyncio.run(main())
+for i in range(5):  # Adjust the range as needed
+    asyncio.run(main())
 
 #correr varias vezes de modo a guardar os ficheiros de data com nomes diferentes e na ordem certa
 #Enquanto corremos, temos de gravar ao mesmo tempo para perceber que dado é que corresponde a qual coisa
