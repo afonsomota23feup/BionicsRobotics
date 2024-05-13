@@ -79,15 +79,15 @@ ax = fig.add_subplot(111, projection='3d')
 
 # Inicialização da animação (função vazia)
 def init():
-    ax.set_xlim(min(acceleration_x), max(acceleration_x))
-    ax.set_ylim(min(acceleration_y), max(acceleration_y))
-    ax.set_zlim(min(acceleration_z), max(acceleration_z))
+    ax.set_xlim(min(peaks_acceleration_x), max(acceleration_x))
+    ax.set_ylim(min(peaks_acceleration_y), max(acceleration_y))
+    ax.set_zlim(min(peaks_acceleration_z), max(acceleration_z))
     return []
 
 # Função de animação
 def update(frame):
     ax.cla()
-    ax.plot(acceleration_x[:frame], acceleration_y[:frame], acceleration_z[:frame], color='b')
+    ax.plot(peaks_acceleration_x[:frame], peaks_acceleration_y[:frame], peaks_acceleration_z[:frame], color='b')
     # Definir rótulos dos eixos
     #ax.set_xlabel('Tempo (s)')
     ax.set_xlabel('Aceleração eixo x (m/s^2)')
