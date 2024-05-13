@@ -1,33 +1,58 @@
 import struct
 
-# Função para extrair valores de ponto flutuante de uma faixa de bytes
-def extract_float(byte_array, start_byte, end_byte):
-    bytes_data = byte_array[start_byte:end_byte + 1]
-    float_value = struct.unpack('<f', bytes_data)[0]
-    return float_value
+# Dados em bytes
+data_bytes = bytearray(b'\x00\xe0N\xbf\x00\xf0\x88>\x00\xe0\xd3\xbe\x00R\x99B\x00\xce\xaeA\x00_\x02\xc2\x00\x9f\xbaB \x12kB\x00\x8cRB\x80\xa2/DX\xa8\xa4D\x00hX\xbf\x00@\x85>\x00\x80\xed\xbe\xc0\xb4\xadB\x00e\xfeA\x00\x86\xba\xc1\x00\r\xb1B\xa0\xe4cB\xa0\xf7KB\xf0n/D\xc8t\xa4D\x00\x00R\xbf\x00\xc0]>\x00\xd8\x0c\xbf\xc0\x89\xc9B\x80\x97\x03B\x00\x1d\x8d\xc1\x00\xb2\xa2B \xb7\\B@\x9a@B0=0D\x90\x8e\xa4D\x00\xd8S\xbf\x00\xa0;>\x00X\x11\xbf\xc0\xbe\xd5B\x00\xbd\x1cB\x00VB\xc1\x00\r\xb1B\xe0\x84[B\x80\x95FB\xe0\xd70D\xc8t\xa4D\x008N\xbf\x00\xe0%>\x00\xf02\xbf\x80\x86\xeeB\x80x\x1dB\x00\xd4\xad\xc0\x00\x9f\xbaB\x00UWB\xa0\xd38B\x00?1DX\xa8\xa4D')
 
-# Sequência de bytes fornecida
-byte_data = bytearray(b'\x00\x00\x19\xbd\x00\x00m\xbf\x00@\x0f>\x00%\xdf\xc1\x00\x01\xe5\xc1\x80\xcb$\xc2\x90\x90,E\x11\xdb\xe5D\x00\x00\x00\x00`uOD\xc8\x1e\x91D\x00\x00\x08\xbb\x00xc\xbf\x00`9>\x006\xf1\xc1\x00\x12w\xc1\x00\x19a\xc2\x00\xd4\xf8\xc1\xc0\xb4\xdf\xc1\x80o\xf6A\xb0\xdaND\x908\x91D\x00\x00~=\x00`o\xbf\x00 Z>\x80[\r\xc2\x00\x08O@\x00\xe2\x81\xc2\x00h\xbf\xc1\x80\x82\xde\xc1\x003\x01B\x00@ND\xe0\x9d\x90D\x00\xc0\xf9=\x00Hz\xbf\x00`|>\x80~\x1c\xc2\x004\x9e\xc0\x80\xb0g\xc2\x00\x8c\xd2\xc1@P\xdd\xc1\x80o\xf6Ap\x0cNDh\xe9\x8fD\x00\xc0U>\x00\\\x8f\xbf\x00\xc0\xc8=\x80\x90\x19\xc2\x00k\x00\xc2\x00s\xd2\xc1\x00D\xac\xc1\x00\xb0\xe5\xc1\xc0\x0f\xeeA\xe0\xd8MD0\x03\x90D')
+# Decodificação de cada float
+unpackedData = struct.unpack('55f', data_bytes[:220])  # 55 unpackedData no total, 4 bytes cada
 
-# Definindo as constantes
-num_instants = 5
-data_per_instant = 44  # Alterado de 45 para 44 para corrigir a lógica
+print(unpackedData)
 
 # Iterando sobre cada instante
-for i in range(num_instants):
-    print(f"Instante {i+1}:")
-    # Iterando sobre cada sensor
-    for j in range(5):
-        print(f"Sensor {j+1}:")
-        # Iterando sobre cada elemento
-        for k in range(3):
-            start_byte = i * data_per_instant + j * 44 + k * 4  # Corrigido de 44 para 4
-            end_byte = start_byte + 3
-            float_value = extract_float(byte_data, start_byte, end_byte)
-            print(f"   Elemento {k+1}: {float_value}")
+#recebemos 10 mensagens num segundo
+#cada mensagem tem 5 instantes de 11 elementos, ou seja num segundo recebemos 50 instantes 
+#os 3 primeiros elementos são o acelerometro x, y e z correspondente
+#os 3 elementos seguintes são o giroscopio x, y e z correspondente
+#os 3 elementos seguintes são o magnetometro x, y e z correspondente
+#o elemento seguinte é a força 1 
+#o elemento seguinte é a força 2
 
-    # Corrigindo o índice de início e fim para o último elemento do sensor 5
-    start_byte = i * data_per_instant + 4 * 44 + 3 * 4
-    end_byte = start_byte + 3
-    float_value = extract_float(byte_data, start_byte, end_byte)
-    print(f"   Elemento 4: {float_value}")
+# Iterando sobre cada instante
+print(f"Instante {1}:")
+print(f"   Acelerômetro: ({unpackedData[0]}, {unpackedData[1]}, {unpackedData[2]})")
+print(f"   Giroscópio: ({unpackedData[3]}, {unpackedData[4]}, {unpackedData[5]})")
+print(f"   Magnetômetro: ({unpackedData[6]}, {unpackedData[7]}, {unpackedData[8]})")
+print(f"   Força 1: {unpackedData[9]}")
+print(f"   Força 2: {unpackedData[10]}")
+
+print(f"Instante 2:")
+print(f"   Acelerômetro: ({unpackedData[11]}, {unpackedData[12]}, {unpackedData[13]})")
+print(f"   Giroscópio: ({unpackedData[14]}, {unpackedData[15]}, {unpackedData[16]})")
+print(f"   Magnetômetro: ({unpackedData[17]}, {unpackedData[18]}, {unpackedData[19]})")
+print(f"   Força 1: {unpackedData[20]}")
+print(f"   Força 2: {unpackedData[21]}")
+
+print(f"Instante 3:")
+print(f"   Acelerômetro: ({unpackedData[22]}, {unpackedData[23]}, {unpackedData[24]})")
+print(f"   Giroscópio: ({unpackedData[25]}, {unpackedData[26]}, {unpackedData[27]})")
+print(f"   Magnetômetro: ({unpackedData[28]}, {unpackedData[29]}, {unpackedData[30]})")
+print(f"   Força 1: {unpackedData[31]}")
+print(f"   Força 2: {unpackedData[32]}")
+
+print(f"Instante 4:")
+print(f"   Acelerômetro: ({unpackedData[33]}, {unpackedData[34]}, {unpackedData[35]})")
+print(f"   Giroscópio: ({unpackedData[36]}, {unpackedData[37]}, {unpackedData[38]})")
+print(f"   Magnetômetro: ({unpackedData[39]}, {unpackedData[40]}, {unpackedData[41]})")
+print(f"   Força 1: {unpackedData[42]}")
+print(f"   Força 2: {unpackedData[43]}")
+
+print(f"Instante 5:")
+print(f"   Acelerômetro: ({unpackedData[44]}, {unpackedData[45]}, {unpackedData[46]})")
+print(f"   Giroscópio: ({unpackedData[47]}, {unpackedData[48]}, {unpackedData[49]})")
+print(f"   Magnetômetro: ({unpackedData[50]}, {unpackedData[51]}, {unpackedData[52]})")
+print(f"   Força 1: {unpackedData[53]}")
+print(f"   Força 2: {unpackedData[54]}")
+
+
+data = []
+
