@@ -17,7 +17,7 @@ force = []
 
 
 
-def callback(data: bytearray):
+def callback(sender: int, data: bytearray):
     for i in range(1000):
         # print("O tipo de ficheiro dos dados é", type(data))
         unpackedData = struct.unpack('55f', data[:220])
