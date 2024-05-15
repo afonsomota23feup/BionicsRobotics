@@ -56,3 +56,88 @@ print(f"   Força 2: {unpackedData[54]}")
 
 data = []
 
+
+unpackedData = struct.unpack('55f', data[:220])  # 55 unpackedData no total, 4 bytes cada
+converted_data_points.append(unpackedData)
+
+#------------------Instant 1------------------
+
+ax1 = unpackedData[0]   
+ay1 = unpackedData[1]
+az1 = unpackedData[2]
+force11 = unpackedData[9]
+
+# time = data['Time (s)'].values
+acceleration_x.append(ax1)
+acceleration_y.append(ay1)
+acceleration_z.append(az1)
+force.append(force11)
+
+instants_data.append([ax1, ay1, az1, force11])
+
+#------------------Instatnt 2------------------
+
+ax2 = unpackedData[11]
+ay2 = unpackedData[12]
+az2 = unpackedData[13]
+force12 = unpackedData[20]
+
+# time = data['Time (s)'].values
+acceleration_x.append(ax2)
+acceleration_y.append(ay2)
+acceleration_z.append(az2)
+force.append(force12)
+
+instants_data.append([ax2, ay2, az2, force12])
+
+#------------------Instatnt 3------------------
+
+ax3 = unpackedData[22]
+ay3 = unpackedData[23]
+az3 = unpackedData[24]
+force13 = unpackedData[31]
+
+# time = data['Time (s)'].values
+acceleration_x.append(ax3)
+acceleration_y.append(ay3)
+acceleration_z.append(az3)
+force.append(force13)
+
+instants_data.append([ax3, ay3, az3, force13])
+
+#------------------Instatnt 4------------------
+
+ax4 = unpackedData[33]
+ay4 = unpackedData[34]
+az4 = unpackedData[35]
+force14 = unpackedData[42]
+
+# time = data['Time (s)'].values
+acceleration_x.append(ax4)
+acceleration_y.append(ay4)
+acceleration_z.append(az4)
+force.append(force14)
+
+instants_data.append([ax4, ay4, az4, force14])
+
+#------------------Instatnt 5------------------
+ax5 = unpackedData[44]
+ay5 = unpackedData[45]
+az5 = unpackedData[46]
+force15 = unpackedData[53]
+
+# time = data['Time (s)'].values
+acceleration_x.append(ax5)
+acceleration_y.append(ay5)
+acceleration_z.append(az5)
+force.append(force15)
+
+instants_data.append([ax5, ay5, az5, force15])
+
+
+
+print (acceleration_x)
+print(instants_data)
+
+
+

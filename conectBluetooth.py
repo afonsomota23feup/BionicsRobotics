@@ -1,27 +1,91 @@
 import asyncio
 from bleak import BleakScanner, BleakClient
 import struct
+from datetime import timedelta
+from datetime import datetime
+import csv
+import matplotlib.pyplot as plt
 
-raw_data_points = []
+
 converted_data_points = []
 instants_data = []
+acceleration_x = []
+acceleration_y = []
+acceleration_z = []
+time = []
+force = []
 
 
 
-def callback(sender: int, data: bytearray):
-    print(f"Received data from {sender}: {data}")
-    raw_data_points.append(data)
+def callback(data: bytearray):
+    for i in range(1000):
+        # print("O tipo de ficheiro dos dados é", type(data))
+        unpackedData = struct.unpack('55f', data[:220])
+        timestamp = datetime.now()
 
-def process_data_to_robot():
+        #------------------Instant 1------------------
+        ax1 = unpackedData[0]
+        ay1 = unpackedData[1]
+        az1 = unpackedData[2]
+        force11 = unpackedData[9]
+        acceleration_x.append(ax1)
+        acceleration_y.append(ay1)
+        acceleration_z.append(az1)
+        force.append(force11)
+        timestamp1=timestamp + timedelta(milliseconds=20)
+        time.append(timestamp1)
 
-    for line in converted_data_points:
-        divided_line = [line[i:i+11] for i in range(0, len(line), 11)]
-        # do something with the divided line
-        # e.g. print each instant
-        for instant in divided_line:
-            print(instant)
-    
+        #------------------Instatnt 2------------------
+        ax2 = unpackedData[11]
+        ay2 = unpackedData[12]
+        az2 = unpackedData[13]
+        force12 = unpackedData[20]
+        acceleration_x.append(ax2)
+        acceleration_y.append(ay2)
+        acceleration_z.append(az2)
+        force.append(force12)
+        timestamp2=timestamp + timedelta(milliseconds=40)
+        time.append(timestamp2)
 
+        #------------------Instatnt 3------------------
+        ax3 = unpackedData[22]
+        ay3 = unpackedData[23]
+        az3 = unpackedData[24]
+        force13 = unpackedData[31]
+        acceleration_x.append(ax3)
+        acceleration_y.append(ay3)
+        acceleration_z.append(az3)
+        force.append(force13)
+        timestamp3=timestamp + timedelta(milliseconds=60)
+        time.append(timestamp3)
+
+        #------------------Instatnt 4------------------
+        ax4 = unpackedData[33]
+        ay4 = unpackedData[34]
+        az4 = unpackedData[35]
+        force14 = unpackedData[42]
+        acceleration_x.append(ax4)
+        acceleration_y.append(ay4)
+        acceleration_z.append(az4)
+        force.append(force14)
+        timestamp4=timestamp + timedelta(milliseconds=80)
+        time.append(timestamp4)
+
+        #------------------Instatnt 5------------------
+        ax5 = unpackedData[44]
+        ay5 = unpackedData[45]
+        az5 = unpackedData[46]
+        force15 = unpackedData[53]
+        acceleration_x.append(ax5)
+        acceleration_y.append(ay5)
+        acceleration_z.append(az5)
+        force.append(force15)
+        timestamp5 = timestamp + timedelta(milliseconds=100)
+        
+        time.append(timestamp5)
+
+        print(acceleration_x)
+        i=i+1
 
 async def main():
     devices = await BleakScanner.discover()
@@ -45,51 +109,13 @@ async def main():
                     if characteristic.uuid == characteristic_uuid:
                         print(characteristic.properties)
 
-            data = await client.start_notify(characteristic_uuid, callback)
-            
-            unpackedData = struct.unpack('55f', data[:220])  # 55 unpackedData no total, 4 bytes cada
-            converted_data_points.append(unpackedData)
+            data = await client.start_notify(characteristic_uuid, callback)                            
 
-            ax1 = unpackedData[0]
-            ay1 = unpackedData[1]
-            az1 = unpackedData[2]
-            force11 = unpackedData[9]
-
-            instants_data.append([ax1, ay1, az1, force11])
-
-            ax2 = unpackedData[11]
-            ay2 = unpackedData[12]
-            az2 = unpackedData[13]
-            force12 = unpackedData[20]
-
-            instants_data.append([ax2, ay2, az2, force12])
-
-            ax3 = unpackedData[22]
-            ay3 = unpackedData[23]
-            az3 = unpackedData[24]
-            force13 = unpackedData[31]
-
-            instants_data.append([ax3, ay3, az3, force13])
-
-            ax4 = unpackedData[33]
-            ay4 = unpackedData[34]
-            az4 = unpackedData[35]
-            force14 = unpackedData[42]
-
-            instants_data.append([ax4, ay4, az4, force14])
-
-            ax5 = unpackedData[44]
-            ay5 = unpackedData[45]
-            az5 = unpackedData[46]
-            force15 = unpackedData[53]
-
-            instants_data.append([ax5, ay5, az5, force15])
-                            
-
-        # save the data in a file
-            with open("dataTest.txt", "w") as f:
-                for data in raw_data_points:
-                    f.write(str(data) + "\n")
-            await asyncio.sleep(1)  # pause for a second before reading again
+        # save data to CSV
+        dataToSave = zip(time, acceleration_x)
+        with open('data.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Time', 'Acceleration X'])
+            writer.writerows(dataToSave)
 
 asyncio.run(main())

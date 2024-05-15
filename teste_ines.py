@@ -12,13 +12,14 @@ data = pd.read_csv('RawData.csv')
 time = data['Time (s)'].values
 acceleration_x = data['Linear Acceleration x (m/s^2)'].values
 acceleration_y = data['Linear Acceleration y (m/s^2)'].values
-acceleration_z= data['Linear Acceleration z (m/s^2)'].values
+acceleration_z= data['Linear Acceleration z (m/s^2)'].valuesz
 
 # Initialize filter
 filter_window = 5
 filter_coeff = np.ones(filter_window)/filter_window
 calibration_offset = 0
 calibration_gain = 1
+
     
 # Filter the data
 filtered_x = np.convolve(acceleration_x, filter_coeff, mode='same')
