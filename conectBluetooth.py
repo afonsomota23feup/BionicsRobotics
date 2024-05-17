@@ -17,7 +17,7 @@ force = []
 
 
 
-def callback(data: bytearray):
+def callback(sender: int, data: bytearray):
     for i in range(1000):
         # print("O tipo de ficheiro dos dados é", type(data))
         unpackedData = struct.unpack('55f', data[:220])
@@ -108,8 +108,10 @@ async def main():
                 for characteristic in service.characteristics:
                     if characteristic.uuid == characteristic_uuid:
                         print(characteristic.properties)
-
-            data = await client.start_notify(characteristic_uuid, callback)                            
+            
+            data = await client.start_notify(characteristic_uuid, callback)
+            # await asyncio.sleep(10)
+            # await client.stop_notify(characteristic_uuid)
 
         # save data to CSV
         dataToSave = zip(time, acceleration_x)
