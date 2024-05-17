@@ -4,7 +4,7 @@ import numpy as np
 from scipy.signal import savgol_filter
 
 # Carregar os dados do arquivo CSV
-data = pd.read_csv('RawData.csv')
+data = pd.read_csv('15_05_1.csv')
 
 # Extrair os valores de tempo e acelerações
 time = data['Time (s)'].values
