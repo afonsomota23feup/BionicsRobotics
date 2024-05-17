@@ -1,12 +1,54 @@
 import struct
+import numpy as np
+import matplotlib.pyplot as plt
 
-# Dados em bytes
-data_bytes = bytearray(b'\x00\xe0N\xbf\x00\xf0\x88>\x00\xe0\xd3\xbe\x00R\x99B\x00\xce\xaeA\x00_\x02\xc2\x00\x9f\xbaB \x12kB\x00\x8cRB\x80\xa2/DX\xa8\xa4D\x00hX\xbf\x00@\x85>\x00\x80\xed\xbe\xc0\xb4\xadB\x00e\xfeA\x00\x86\xba\xc1\x00\r\xb1B\xa0\xe4cB\xa0\xf7KB\xf0n/D\xc8t\xa4D\x00\x00R\xbf\x00\xc0]>\x00\xd8\x0c\xbf\xc0\x89\xc9B\x80\x97\x03B\x00\x1d\x8d\xc1\x00\xb2\xa2B \xb7\\B@\x9a@B0=0D\x90\x8e\xa4D\x00\xd8S\xbf\x00\xa0;>\x00X\x11\xbf\xc0\xbe\xd5B\x00\xbd\x1cB\x00VB\xc1\x00\r\xb1B\xe0\x84[B\x80\x95FB\xe0\xd70D\xc8t\xa4D\x008N\xbf\x00\xe0%>\x00\xf02\xbf\x80\x86\xeeB\x80x\x1dB\x00\xd4\xad\xc0\x00\x9f\xbaB\x00UWB\xa0\xd38B\x00?1DX\xa8\xa4D')
+acceleration_x = []
+acceleration_y = []
+acceleration_z = []
+giroscope_x = []
+giroscope_y = []
+giroscope_z = []
+time = []
+force = []
+data_bytes = []
+instants_data = []
 
-# Decodificação de cada float
-unpackedData = struct.unpack('55f', data_bytes[:220])  # 55 unpackedData no total, 4 bytes cada
+# Define a function to read the data from the file and convert it into the desired format
+def load_data_from_file(filename):
+    with open(filename, 'r') as file:
+        lines = file.readlines()
 
-print(unpackedData)
+    # Create a list to store bytearrays
+    data_list = []
+
+    # Iterate over each line and convert to bytearray
+    for line in lines:
+        # Remove unwanted characters and whitespace
+        cleaned_line = line.strip().replace('bytearray(b"', '').replace('")', '')
+
+        # Convert the hexadecimal string to bytes
+        byte_array = bytearray.fromhex(cleaned_line)
+
+        # Add to the data list
+        data_list.append(byte_array)
+    
+    return data_list
+
+# Load the data from the 'data.txt' file
+data = load_data_from_file('data.txt')
+data_bytes_list = data
+
+# Print the loaded data to verify the result
+for byte_array in data:
+    print(byte_array)
+
+# Optionally, you can print the length of the data array to ensure all lines were read
+print(f"Total byte arrays loaded: {len(data)}")
+
+# Process each bytearray in the list
+for data_bytes in data_bytes_list:
+    # Decodificação de cada float
+    unpackedData = struct.unpack('55f', data_bytes)  # 55 unpackedData no total, 4 bytes cada
 
 # Iterando sobre cada instante
 #recebemos 10 mensagens num segundo
@@ -53,25 +95,24 @@ print(f"   Magnetômetro: ({unpackedData[50]}, {unpackedData[51]}, {unpackedData
 print(f"   Força 1: {unpackedData[53]}")
 print(f"   Força 2: {unpackedData[54]}")
 
-
-data = []
-
-
-unpackedData = struct.unpack('55f', data[:220])  # 55 unpackedData no total, 4 bytes cada
-converted_data_points.append(unpackedData)
-
 #------------------Instant 1------------------
-
 ax1 = unpackedData[0]   
 ay1 = unpackedData[1]
 az1 = unpackedData[2]
 force11 = unpackedData[9]
+gx = unpackedData[3]
+gy = unpackedData[4]
+gz = unpackedData[5]
 
-# time = data['Time (s)'].values
+        # time = data['Time (s)'].values
 acceleration_x.append(ax1)
 acceleration_y.append(ay1)
 acceleration_z.append(az1)
 force.append(force11)
+giroscope_x.append(gx)
+giroscope_y.append(gy)
+giroscope_z.append(gz)
+
 
 instants_data.append([ax1, ay1, az1, force11])
 
@@ -136,8 +177,10 @@ instants_data.append([ax5, ay5, az5, force15])
 
 
 
-print (acceleration_x)
-print(instants_data)
+plt.plot(acceleration_x, label='Position')
+plt.xlabel('Giroscopio')
+plt.title('Aceleração vs Time')
+plt.show()
 
 
 

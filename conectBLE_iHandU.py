@@ -4,24 +4,25 @@ from bleak import BleakClient, BleakScanner
 
 import matplotlib.pyplot as plt
 
-DATA_LENGTH = 220 # 4 bytes for each of the 54 values
+DATA_LENGTH = 220  # 4 bytes for each of the 54 values
 data_points = []
 
-#------------USAR ESTA PRIMEIRO----------------
-#esta é a conexão simples, que guarda os dados raw
+# ------------USAR ESTA PRIMEIRO----------------
+# esta é a conexão simples, que guarda os dados raw
 async def callback(sender, data):
     data_points.append(data)
-    #isto é para organizar os dados caso eles vejam todos seguidos, descomentem se isso acontecer
-    #processed_values = process_data(data)
+    # isto é para organizar os dados caso eles vejam todos seguidos, descomentem se isso acontecer
+    # processed_values = process_data(data)
+
 
 def process_data(data):
     return struct.unpack('<' + 'f' * 54, data)
 
 
-#esta funcao é o que descompacta os dados, temos de tentar perceber como é
+# esta funcao é o que descompacta os dados, temos de tentar perceber como é
 # eles estão a ser enviados para conseguirmos descompactar
 # a funcao de simples é a que guarda os dados raw, corram essa para conseguirmos
-#decifrar o que nos é enviado 
+# decifrar o que nos é enviado
 
 # async def callback(sender, data):
 #     if isinstance(data, str):
@@ -36,22 +37,24 @@ def process_data(data):
 # def process_data(data):
 #     return struct.unpack('<' + 'f' * 54, data)
 
+
 async def connect_to_device(device_id, device_uuid):
-    #print all the discover devices
+    # print all the discover devices
     devices = await BleakScanner.discover()
     for d in devices:
         print(d)
-        
-    #connect to the device
+
+    # connect to the device
     async with BleakClient(device_id) as client:
         try:
             await client.connect()
-            #conecta se ao dispositivo
+            # conecta se ao dispositivo
             print(f"Connected to device: {device_id}")
 
-            # Começa o envio dos dados 
-            #await client.start_notify(device_uuid, callback)
+            # Começa o envio dos dados
+            # await client.start_notify(device_uuid, callback)
             await client.read_gatt_char(device_uuid, callback)
+
             print(f"Start notify for device: {device_uuid}")
 
             # Coleta dados por 60 segundos
@@ -61,14 +64,10 @@ async def connect_to_device(device_id, device_uuid):
             print(f"Failed to connect to device: {device_uuid}, Error: {e}")
 
 
-
 async def main():
     device_id = "84:71:27:AC:20:D2"
-    #device_uuid = "6f30b86e-bb28-48a6-b68d-4ae2e60e512a"
+    # device_uuid = "6f30b86e-bb28-48a6-b68d-4ae2e60e512a"
     device_uuid = "14181dce-eb95-46c5-8431-3b4fe0e0a12d"
-
-    
-
 
     await asyncio.gather(connect_to_device(device_id, device_uuid))
 
@@ -81,7 +80,7 @@ async def main():
 for i in range(5):  # Adjust the range as needed
     asyncio.run(main())
 
-#correr varias vezes de modo a guardar os ficheiros de data com nomes diferentes e na ordem certa
-#Enquanto corremos, temos de gravar ao mesmo tempo para perceber que dado é que corresponde a qual coisa
-#Quando percebermos que esta a funcionar, descomentar o código acima
-#Perguntar ao afonso se é para colocar o codigo que esta, como comentário(???)
+# correr varias vezes de modo a guardar os ficheiros de data com nomes diferentes e na ordem certa
+# Enquanto corremos, temos de gravar ao mesmo tempo para perceber que dado é que corresponde a qual coisa
+# Quando percebermos que esta a funcionar, descomentar o código acima
+# Perguntar ao afonso se é para colocar o codigo que esta, como comentário(???)
