@@ -4,11 +4,18 @@ import numpy as np
 from scipy.signal import find_peaks, savgol_filter
 
 # Carregar os dados do arquivo CSV
-data = pd.read_csv('RawData.csv')
+data = pd.read_csv('15_05_1.csv')
 
 # Extrair os valores de tempo e acelerações
 time = data['Time (s)'].values
 acceleration_x = data['Linear Acceleration x (m/s^2)'].values
+
+
+# Calcular a velocidade a partir da aceleração
+velocity_x = np.cumsum(acceleration_x)
+
+# Calcular a posição a partir da velocidade
+position_x = np.cumsum(velocity_x)
 
 # Aplicar o filtro de Savitzky-Golay para suavizar os dados
 window_length = 51  # Deve ser um número ímpar e maior que polyorder
@@ -41,8 +48,9 @@ plt.figure(figsize=(15, 5))
 # Primeiro subplot
 plt.subplot(1, 1, 1)
 plt.plot(time, acceleration_x, linestyle='--', color='b', label='Original')
-plt.plot(time, smoothed_x, linestyle='-', color='g', label='Suavizado (Savitzky-Golay)')
-plt.plot(time, smoothed_x_with_peaks, linestyle='-', color='r', label='Suavizado com Picos Restaurados e Amplificados')
+# plt.plot(time, smoothed_x, linestyle='-', color='g', label='Suavizado (Savitzky-Golay)')
+plt.plot(time, position_x, linestyle='-', color='g', label='Suavizado (Savitzky-Golay)')
+# plt.plot(time, smoothed_x_with_peaks, linestyle='-', color='r', label='Suavizado com Picos Restaurados e Amplificados')
 plt.title('Aceleração 1')
 plt.xlabel('Tempo (s)')
 plt.ylabel('Aceleração (m/s^2)')
