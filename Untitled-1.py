@@ -1,10 +1,5 @@
-from struct import pack, unpack
+import serial.tools.list_ports
 
-packed = pack('fff', -1, -2, -3)
-unpacked = unpack('fff', packed)
-
-print("Packed")
-print(packed)
-
-print("Unpacked")
-print(unpacked) 
+ports = serial.tools.list_ports.comports()
+available_ports = [port.name for port in ports]
+print(available_ports)
