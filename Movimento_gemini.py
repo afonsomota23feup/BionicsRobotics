@@ -2,7 +2,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks, savgol_filter
+import serial
 #from scipy.integrate import trapz
+
+# Inicializar a comunicação serial
+ser = serial.Serial('COM3', 9600)
 
 # Load data from CSV
 data = pd.read_csv('15_05_1.csv')

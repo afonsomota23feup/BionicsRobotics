@@ -10,6 +10,7 @@ data_points = []
 # ------------USAR ESTA PRIMEIRO----------------
 # esta é a conexão simples, que guarda os dados raw
 async def callback(sender, data):
+    data_converted = struct.unpack('<' + 'f' * 54, data)
     data_points.append(data)
     # isto é para organizar os dados caso eles vejam todos seguidos, descomentem se isso acontecer
     # processed_values = process_data(data)
