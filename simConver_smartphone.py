@@ -28,63 +28,78 @@ def moving_average(data, window_size):
     return np.convolve(data, np.ones(window_size)/window_size, mode='valid')
 
 def KalmanFilter(data, Q, R, P=1):
-    filtered_position = []
-    x = 0     # Initial position estimate
-    v = 0     # Initial velocity estimate
-    for i in range(len(data)):
-        # Prediction step
-        x += v
-        P += Q
+    filtered_position = data
+    # x = 0     # Initial position estimate
+    # v = 0     # Initial velocity estimate
+    # for i in range(len(data)):
+    #     # Prediction step
+    #     x += v
+    #     P += Q
         
-        # Correction step (measurement update)
-        K = P / (P + R)
-        x += K * (data[i] - x)
-        v = x
+    #     # Correction step (measurement update)
+    #     K = P / (P + R)
+    #     x += K * (data[i] - x)
+    #     v = x
         
-        # Store filtered position estimates
-        filtered_position.append(x)
+    #     # Store filtered position estimates
+    #     filtered_position.append(x)
     return filtered_position
 
 
 
-# Carregar os dados do arquivo CSV
-data_acel = pd.read_csv('Accelerometer_v2.csv')
-# Extrair os valores de tempo e acelerações
-time = data_acel['Time (s)'].values
-raw_acceleration_x = data_acel['Acceleration x (m/s^2)'].values
-raw_acceleration_y = data_acel['Acceleration y (m/s^2)'].values
-raw_acceleration_z= data_acel['Acceleration z (m/s^2)'].values
-
 
 # Carregar os dados do arquivo CSV
-data_gy = pd.read_csv('Gyroscope_v2.csv')
+data_acel = pd.read_csv('sim_acele.csv')
 # Extrair os valores de tempo e acelerações
-time = data_gy['Time (s)'].values
-raw_gyro_x = data_gy['Gyroscope x (rad/s)'].values
-raw_gyro_y = data_gy['Gyroscope y (rad/s)'].values
-raw_gyro_z = data_gy['Gyroscope z (rad/s)'].values
 
+raw_acceleration_x = data_acel['Acceleration X'].values
+raw_acceleration_y = data_acel['Acceleration Y'].values
+raw_acceleration_z= data_acel['Acceleration Z'].values
+
+# Número de amostras
+num_amostras = raw_acceleration_x.size
+# Frequência de amostragem (em Hz)
+frequencia_amostragem = 50
+# Calcula o intervalo de tempo entre cada amostra
+intervalo_tempo = 1 / frequencia_amostragem
+# Cria o vetor de tempo
+time = [i * intervalo_tempo for i in range(num_amostras)]
+
+# Carregar os dados do arquivo CSV
+data_gy = pd.read_csv('sim_gyro.csv')
+# Extrair os valores de tempo e acelerações
+raw_gyro_x = data_gy['Gyroscope X'].values
+raw_gyro_y = data_gy['Gyroscope Y'].values
+raw_gyro_z = data_gy['Gyroscope Z'].values
+
+# Carregar os dados do arquivo CSV
+data_gy = pd.read_csv('sim_magn.csv')
+# Extrair os valores de tempo e acelerações
+raw_gyro_x = data_gy['Magnetometer X'].values
+raw_gyro_y = data_gy['Magnetometer Y'].values
+raw_gyro_z = data_gy['Magnetometer Z'].values
+
+
+
+time
 acceleration_x = raw_acceleration_x
 acceleration_y = raw_acceleration_y
 acceleration_z = raw_acceleration_z
 
-# acceleration_x = KalmanFilter(raw_acceleration_x, Q, R, P)
-# acceleration_y = KalmanFilter(raw_acceleration_y, Q, R, P)
-# acceleration_z = KalmanFilter(raw_acceleration_z, Q, R, P)
-
-
 gyro_x = raw_gyro_x
 gyro_y = raw_gyro_y
 gyro_z = raw_gyro_z
-# gyro_x = KalmanFilter(raw_gyro_x, Q, R, P)
-# gyro_y = KalmanFilter(raw_gyro_y, Q, R, P)
-# gyro_z = KalmanFilter(raw_gyro_z, Q, R, P)
+
+magno_x = raw_gyro_x
+magno_y = raw_gyro_y
+magno_z = raw_gyro_z
 
 
-alpha = 0.01 # This is the weight for the gyroscope data. You might need to adjust this.
-dt = 1/5
 
-alphaz = 0.98
+alpha = 0.1 # This is the weight for the gyroscope data. You might need to adjust this.
+dt = 1/50
+
+alphaz = 0.9
 
 #Calculate the velocity and position in the x-axis
 velocity_x = alpha * (np.cumsum(gyro_x) * dt) + (1 - alpha) * np.array(acceleration_x)

@@ -161,18 +161,18 @@ async def main():
         force_data = list(zip(force1, force2))
 
         # Write the data to the CSV file
-        with open("sim_acele.csv", 'w', newline='') as file:
+        with open("sim_acele1.csv", 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Acceleration X', 'Acceleration Y', 'Acceleration Z'])  # Write the header
             writer.writerows(acceleration_data)  # Write the data rows
 
         # Write the data to the CSV file
-        with open("sim_gyro.csv", 'w', newline='') as file:
+        with open("sim_gyro1.csv", 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Gyroscope X', 'Gyroscope Y', 'Gyroscope Z'])  # Write the header
             writer.writerows(gyroscope_data)  # Write the data rows
 
-        with open("sim_magn.csv", 'w', newline='') as file:
+        with open("sim_magn1.csv", 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['Magnetometer X', 'Magnetometer Y', 'Magnetometer Z'])  # Write the header
             writer.writerows(magnetometer_data)  # Write the data rows
