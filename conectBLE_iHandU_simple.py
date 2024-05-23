@@ -137,6 +137,20 @@ async def main():
 
     # Set up the live plot
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+    fig.suptitle('Acceleration Data')
+    ax1.set_ylabel('Acceleration X')
+    ax2.set_ylabel('Acceleration Y')
+    ax3.set_ylabel('Acceleration Z')
+    ax3.set_xlabel('Time (s)')
+
+    # Set up the live plot
+    fig2, (ax4, ax5, ax6) = plt.subplots(3, 1)
+    fig2.suptitle('Gyroscope Data')
+    ax4.set_ylabel('Gyroscope X')
+    ax5.set_ylabel('Gyroscope Y')
+    ax6.set_ylabel('Gyroscope Z')
+    ax6.set_xlabel('Time (s)')
+   
 
     def update_plot(frame):
         ax1.clear()
@@ -150,6 +164,19 @@ async def main():
         ax1.legend(loc='upper right')
         ax2.legend(loc='upper right')
         ax3.legend(loc='upper right')
+
+        ax4.clear()
+        ax5.clear()
+        ax6.clear()
+        
+        ax4.plot(gyroscope_x, label='Gyroscope X')
+        ax5.plot(gyroscope_y, label='Gyroscope Y')
+        ax6.plot(gyroscope_z, label='Gyroscope Z')
+        
+        ax4.legend(loc='upper right')
+        ax5.legend(loc='upper right')
+        ax6.legend(loc='upper right')
+    
 
         # Define the file path
         csv_file = 'data.csv'
