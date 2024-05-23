@@ -121,7 +121,7 @@ dt = 1/50
 alphaz = 0.9
 =======
 alpha = 0.01 # This is the weight for the gyroscope data. You might need to adjust this.
-dt = 1
+dt= 1
 
 alphaz = 0.75
 >>>>>>> 7b44716932c548243f27e4b33a1fcc817b92cb28
