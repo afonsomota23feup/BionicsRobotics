@@ -4,6 +4,7 @@ from bleak import BleakClient, BleakScanner
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import csv
+import subprocess
 
 CHARACTERISTIC_UUID = "14181dce-eb95-46c5-8431-3b4fe0e0a12d"
 CONNECTION_RETRIES = 3
@@ -104,7 +105,7 @@ async def connect_and_interact_with_characteristic(device_id, characteristic_uui
                                 try:
                                     await client.start_notify(characteristic, notification_handler)
                                     print("Started notification...")
-                                    await asyncio.sleep(45)  # Listen for notifications for 30 seconds
+                                    await asyncio.sleep(15)  # Listen for notifications for 15 seconds
                                     await client.stop_notify(characteristic)
                                     print("Stopped notification.")
                                 except Exception as e:
@@ -212,5 +213,11 @@ async def main():
     ani = FuncAnimation(fig, update_plot, interval=1000)
     plt.show()
 
+
 # Run the main function
 asyncio.run(main())
+
+# Terminate the current script
+
+# Launch another script
+subprocess.run(["python", "afonso_ines.py"])
